@@ -20,6 +20,8 @@ class GANMonitor(tk.Tk):
 
         self.gan, self.generator, self.discriminator = create_gan()
         self.running = False
+        self.train_queue = queue.Queue()
+        self.train_thread = Thread(target=self.train, args=(self.train_queue,))
 
         self.start_button = ttk.Button(self, text="Start", command=self.start)
         self.start_button.pack()
@@ -53,20 +55,30 @@ class GANMonitor(tk.Tk):
 
     def start(self):
         self.running = True
-        self.train_thread = Thread(target=self.train)
         self.train_thread.start()
-
+        self.after(1000, self.update_train_queue, self.train_queue)
     def stop(self):
         self.running = False
 
-    def train(self):
-        step, d_loss, d_acc, g_loss = train_gan(self.gan, self.generator, self.discriminator)
-        self.step_label.config(text="Step: {}".format(step))
-        self.d_loss_label.config(text="D loss: {}".format(d_loss))
-        self.d_acc_label.config(text="D acc: {}".format(d_acc))
-        self.g_loss_label.config(text="G loss: {}".format(g_loss))
-        if self.running:
-            self.after(1000, self.train) # train again in 1000ms
+    def train(self, train_queue):
+        while self.running:
+            step, d_loss, d_acc, g_loss = train_gan(self.gan, self.generator, self.discriminator)
+            train_queue.put((step, d_loss, d_acc, g_loss))
+            yield step, d_loss, d_acc, g_loss
+
+    def update_train_queue(self, train_queue):
+        try:
+            step, d_loss, d_acc, g_loss = train_queue.get(0)
+            self.step_label.config(text="Step: {}".format(step))
+            self.d_loss_label.config(text="D loss: {}".format(d_loss))
+            self.d_acc_label.config(text="D acc: {}".format(d_acc))
+            self.g_loss_label.config(text="G loss: {}".format(g_loss))
+            if self.running:
+                self.after(1000, self.update_train_queue, train_queue)
+        except queue.Empty:
+            if self.running:
+                self.after(1000, self.update_train_queue, train_queue)
+
 
     def generate_shape(self):
         shape = generate_shapes(self.generator, "circle")
@@ -74,6 +86,11 @@ class GANMonitor(tk.Tk):
         self.axes.clear()
         self.axes.scatter(shape[0], shape[1], c=shape[2])
         self.canvas.draw()
+
+if __name__ == "__main__":
+    app = GANMonitor()
+    app.mainloop()
+
 
 
 if __name__ == "__main__":
