@@ -6,6 +6,11 @@ from tkinter import ttk
 from train import train_gan, generate_shapes, create_gan
 from matplotlib.backends.backend_tkagg import FigureCanvasTkAgg
 from matplotlib.figure import Figure
+import matplotlib.pyplot as plt
+import numpy as np
+import cv2
+import os
+import queue
 
 class GANMonitor(tk.Tk):
     def __init__(self):
