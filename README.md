@@ -1,2 +1,2 @@
 # Schima
-Schima is a GAN that generates shapes from a prompt
+Schima is a generative adversarial network that generates shapes from a prompt
