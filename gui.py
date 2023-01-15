@@ -78,12 +78,13 @@ class GANMonitor(tk.Tk):
             if self.running:
                 self.after(1000, self.update_train_queue, train_queue)
 
-
     def generate_shape(self):
         shape = generate_shapes(self.generator, "circle")
+        x, y = shape[0], shape[1]
+        color = np.full(x.shape, 'r')
         self.shape_label.config(text="Shape: {}".format(shape))
         self.axes.clear()
-        self.axes.scatter(shape[0], shape[1], c=shape[2])
+        self.axes.scatter(x, y, c='magenta')
         self.canvas.draw()
 
 if __name__ == "__main__":
