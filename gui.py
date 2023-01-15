@@ -64,7 +64,6 @@ class GANMonitor(tk.Tk):
         while self.running:
             step, d_loss, d_acc, g_loss = train_gan(self.gan, self.generator, self.discriminator)
             train_queue.put((step, d_loss, d_acc, g_loss))
-            yield step, d_loss, d_acc, g_loss
 
     def update_train_queue(self, train_queue):
         try:
