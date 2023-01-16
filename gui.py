@@ -56,12 +56,10 @@ class GANMonitor(tk.Tk):
         self.canvas.get_tk_widget().pack()
 
     def display_shapes(self):
-        for i in range(10):
-            shape = generate_shapes(self.generator, "trapezoid")
-            shape = shape.reshape(1,-1)
-            self.plot_shape(shape)
-            if not self.running:
-                break
+        shape = generate_shapes(self.generator, "trapezoid")
+        shape = shape.reshape(1,-1)
+        self.plot_shape(shape)
+        if self.running:
             self.after(1000, self.display_shapes)
 
 
