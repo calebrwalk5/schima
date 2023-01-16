@@ -3,13 +3,8 @@ import numpy as np
 
 # Generate a dataset of images of circles and squares
 def generate_data():
-    circles = []
     squares = []
     for i in range(1000):
-        # Generate a random circle
-        x, y = np.random.randn(2)
-        if x**2 + y**2 <= 1:
-            circles.append([x, y])
         # Generate a random square
         x, y = np.random.randn(2)
         if abs(x) <= 1 and abs(y) <= 1:
@@ -67,5 +62,5 @@ def generate_shapes(generator, prompt):
 if __name__ == '__main__':
     gan, generator, discriminator = create_gan()
     train_gan(gan, generator, discriminator)
-    shape = generate_shapes(generator, 'circle')
+    shape = generate_shapes(generator, 'square')
     print(shape)

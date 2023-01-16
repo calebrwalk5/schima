@@ -53,22 +53,23 @@ class GANMonitor(tk.Tk):
         self.canvas = FigureCanvasTkAgg(self.figure, self)
         self.canvas.get_tk_widget().pack()
 
-        self.figures = []
-        
+    def display_shapes(self):
+        shape = generate_shapes(self.generator, "square")
+        self.plot_shape(shape)
+        if self.running:
+            self.after(50, self.display_shapes)
+
     def plot_shape(self, shape):
-        for f in self.figures:
-            f.clf()
-        fig = Figure(figsize=(5,5))
-        ax = fig.add_subplot(111)
-        ax.scatter(shape[0], shape[1])
-        canvas = FigureCanvasTkAgg(fig, self)
-        canvas.get_tk_widget().pack()
-        self.figures.append(fig)
+        self.axes.clear()
+        self.axes.scatter(shape[0], shape[1])
+        self.canvas.draw()
 
     def start(self):
         self.running = True
         self.train_thread.start()
-        self.after(1000, self.update_train_queue, self.train_queue)
+        self.display_shapes()
+        self.after(50, self.update_train_queue, self.train_queue)
+
     def stop(self):
         self.running = False
 
@@ -85,13 +86,13 @@ class GANMonitor(tk.Tk):
             self.d_acc_label.config(text="D acc: {}".format(d_acc))
             self.g_loss_label.config(text="G loss: {}".format(g_loss))
             if self.running:
-                self.after(1000, self.update_train_queue, train_queue)
+                self.after(50, self.update_train_queue, train_queue)
         except queue.Empty:
             if self.running:
-                self.after(1000, self.update_train_queue, train_queue)
+                self.after(50, self.update_train_queue, train_queue)
 
     def generate_shape(self):
-        shape = generate_shapes(self.generator, "circle")
+        shape = generate_shapes(self.generator, "square")
         self.plot_shape(shape)
         x, y = shape[0], shape[1]
         color = np.full(x.shape, 'r')
