@@ -5,13 +5,13 @@ import numpy as np
 def generate_data():
     squares = []
     for i in range(1000):
-        # Generate a random square
         x, y = np.random.randn(2)
         if abs(x) <= 1 and abs(y) <= 1:
             squares.append([x, y])
-    data = np.concatenate((circles, squares), axis=0)
-    labels = np.concatenate((np.zeros(len(circles)), np.ones(len(squares))))
+    data = np.array(squares)
+    labels = np.ones(len(squares))
     return data, labels
+
 
 # Create the GAN
 def create_gan():
