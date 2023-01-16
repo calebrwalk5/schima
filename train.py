@@ -3,14 +3,17 @@ import numpy as np
 
 # Generate a dataset of images of circles and squares
 def generate_data():
-    squares = []
-    for i in range(1000):
-        x, y = np.random.randn(2)
-        if abs(x) <= 1 and abs(y) <= 1:
-            squares.append([x, y])
-    data = np.array(squares)
-    labels = np.ones(len(squares))
+    circles = []
+    for i in range(10000):
+        x, y = np.random.rand(2)
+        x = x*2-1
+        y = y*2-1
+        if x**2 + y**2 <= 1:
+            circles.append([x, y])
+    data = np.array(circles)
+    labels = np.ones(len(circles))
     return data, labels
+
 
 
 # Create the GAN
