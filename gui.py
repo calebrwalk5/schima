@@ -53,6 +53,18 @@ class GANMonitor(tk.Tk):
         self.canvas = FigureCanvasTkAgg(self.figure, self)
         self.canvas.get_tk_widget().pack()
 
+        self.figures = []
+        
+    def plot_shape(self, shape):
+        for f in self.figures:
+            f.clf()
+        fig = Figure(figsize=(5,5))
+        ax = fig.add_subplot(111)
+        ax.scatter(shape[0], shape[1])
+        canvas = FigureCanvasTkAgg(fig, self)
+        canvas.get_tk_widget().pack()
+        self.figures.append(fig)
+
     def start(self):
         self.running = True
         self.train_thread.start()
@@ -80,6 +92,7 @@ class GANMonitor(tk.Tk):
 
     def generate_shape(self):
         shape = generate_shapes(self.generator, "circle")
+        self.plot_shape(shape)
         x, y = shape[0], shape[1]
         color = np.full(x.shape, 'r')
         self.shape_label.config(text="Shape: {}".format(shape))
