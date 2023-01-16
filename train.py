@@ -2,15 +2,15 @@ import tensorflow as tf
 import numpy as np
 import matplotlib.pyplot as plt
 
-# Generate a dataset of images of hexagons and squares
+# Thank you ChatGPT :)
 def generate_data():
     hexagons = []
     squares = []
     for i in range(1000):
-        # Generate a random hexagon
+        # Generate a random hexagon using your equation
         angle = np.random.uniform(0, 2*np.pi)
-        x = np.cos(angle)
-        y = np.sin(angle)
+        x = (np.cos(angle) + np.cos(angle + np.pi/3) + np.cos(angle + 2*np.pi/3))/3
+        y = (np.sin(angle) + np.sin(angle + np.pi/3) + np.sin(angle + 2*np.pi/3))/3
         hexagons.append([x, y])
         # Generate a random square
         x, y = np.random.randn(2)
@@ -19,6 +19,7 @@ def generate_data():
     data = np.concatenate((hexagons, squares), axis=0)
     labels = np.concatenate((np.zeros(len(hexagons)), np.ones(len(squares))))
     return data, labels
+
 
 # Create the GAN
 def create_gan():
@@ -70,5 +71,5 @@ if __name__ == '__main__':
     gan, generator, discriminator = create_gan()
     train_gan(gan, generator, discriminator)
     noise = np.random.randn(1, 2)
-    shape = generate_shapes(generator, 'hexagon', noise)
+    shape = generate_shapes(generator, prompt, noise)
     print(shape)

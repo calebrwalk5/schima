@@ -3,7 +3,7 @@ from threading import Thread
 import matplotlib
 matplotlib.use("TkAgg")
 from tkinter import ttk
-from train import train_gan, generate_shapes, create_gan
+from train import train_gan, generate_shapes, create_gan, noise
 from matplotlib.backends.backend_tkagg import FigureCanvasTkAgg
 from matplotlib.figure import Figure
 import matplotlib.pyplot as plt
