@@ -72,6 +72,7 @@ class GANMonitor(tk.Tk):
 
     def stop(self):
         self.running = False
+        self.train_thread.join()
 
     def train(self, train_queue):
         while self.running:
