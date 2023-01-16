@@ -1,19 +1,23 @@
 import tensorflow as tf
 import numpy as np
 
-# Generate a dataset of images of trapezoids and squares
+# Generate a dataset of images of trapezoids to learn from
 def generate_data():
     trapezoids = []
-    a, b, c = 2, 3, -1
-    for i in range(10000): # Generate 10000 trapezoids
-        x, y = np.random.rand(2) # Random numbers between 0 and 1
-        x = x*2-1
-        y = (a/b)*x + c
+    for i in range(10000):
+        x, y = np.random.rand(2)
+        x = x * 4 - 2  # scale x values between -2 and 2
+        if x < -1:  # left side of the trapezoid
+            y = y * 2 - 1  # scale y values between -1 and 1
+        elif x > 1:  # right side of the trapezoid
+            y = y * 2 - 1  # scale y values between -1 and 1
+        else:  # top of the trapezoid
+            y = y * 2 - 1  # scale y values between -1 and 1
+            y = y * (1 - abs(x))  # adjust y based on x position
         trapezoids.append([x, y])
     data = np.array(trapezoids)
     labels = np.ones(len(trapezoids))
     return data, labels
-
 
 # Create the GAN
 def create_gan():
