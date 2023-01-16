@@ -1,15 +1,17 @@
 import tensorflow as tf
 import numpy as np
+import matplotlib.pyplot as plt
 
-# Generate a dataset of images of circles and squares
+# Generate a dataset of images of hexagons and squares
 def generate_data():
     hexagons = []
     squares = []
     for i in range(1000):
         # Generate a random hexagon
-        x, y = np.random.randn(2)
-        if (x**2 + y**2 <= 1) and (x*y >= 0):
-            hexagons.append([x, y])
+        angle = np.random.uniform(0, 2*np.pi)
+        x = np.cos(angle)
+        y = np.sin(angle)
+        hexagons.append([x, y])
         # Generate a random square
         x, y = np.random.randn(2)
         if abs(x) <= 1 and abs(y) <= 1:
@@ -54,8 +56,8 @@ def train_gan(gan, generator, discriminator):
         print(f'Step {i}, D loss: {d_loss[0]}, D acc: {d_loss[1]}, G loss: {g_loss}')
 
 # Use the generator to generate new shapes
-def generate_shapes(generator, prompt):
-    noise = np.random.randn(1, 2)
+def generate_shapes(generator, 'hexagon', noise):
+    noise = noise
     if prompt == 'hexagon':
         noise[0, 0] = abs(noise[0, 0])
         noise[0, 1] = abs(noise[0, 1])
@@ -67,5 +69,6 @@ def generate_shapes(generator, prompt):
 if __name__ == '__main__':
     gan, generator, discriminator = create_gan()
     train_gan(gan, generator, discriminator)
-    shape = generate_shapes(generator, 'hexagon')
+    noise = np.random.randn(1, 2)
+    shape = generate_shapes(generator, noise)
     print(shape)
