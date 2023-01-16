@@ -1,18 +1,19 @@
 import tensorflow as tf
 import numpy as np
 
-# Generate a dataset of images of circles and squares
+# Generate a dataset of images of trapezoids and squares
 def generate_data():
-    circles = []
-    for i in range(10000): # Generations
+    trapezoids = []
+    a, b, c = 2, 3, -1
+    for i in range(10000): # Generate 10000 trapezoids
         x, y = np.random.rand(2) # Random numbers between 0 and 1
         x = x*2-1
-        y = y*2-1
-        if x**2 + y**2 <= 1: # Check if point is inside circle
-            circles.append([x, y])
-    data = np.array(circles)
-    labels = np.ones(len(circles))
+        y = (a/b)*x + c
+        trapezoids.append([x, y])
+    data = np.array(trapezoids)
+    labels = np.ones(len(trapezoids))
     return data, labels
+
 
 # Create the GAN
 def create_gan():
@@ -52,7 +53,7 @@ def train_gan(gan, generator, discriminator):
 # Use the generator to generate new shapes
 def generate_shapes(generator, prompt):
     noise = np.random.randn(1, 2)
-    if prompt == 'circle':
+    if prompt == 'trapezoid':
         noise[0, 0] = abs(noise[0, 0])
         noise[0, 1] = abs(noise[0, 1])
     shape = generator.predict(noise)[0]
@@ -61,5 +62,5 @@ def generate_shapes(generator, prompt):
 if __name__ == '__main__':
     gan, generator, discriminator = create_gan()
     train_gan(gan, generator, discriminator)
-    shape = generate_shapes(generator, 'circle')
+    shape = generate_shapes(generator, 'trapezoid')
     print(shape)

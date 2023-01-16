@@ -54,7 +54,7 @@ class GANMonitor(tk.Tk):
         self.canvas.get_tk_widget().pack()
 
     def display_shapes(self):
-        shape = generate_shapes(self.generator, "circle")
+        shape = generate_shapes(self.generator, "trapezoid")
         self.plot_shape(shape)
         if self.running:
             self.after(50, self.display_shapes)
@@ -93,20 +93,14 @@ class GANMonitor(tk.Tk):
                 self.after(50, self.update_train_queue, train_queue)
 
     def generate_shape(self):
-        shape = generate_shapes(self.generator, "circle")
+        shape = generate_shapes(self.generator, "trapezoid")
         self.plot_shape(shape)
         x, y = shape[0], shape[1]
         color = np.full(x.shape, 'r')
         self.shape_label.config(text="Shape: {}".format(shape))
         self.axes.clear()
-        self.axes.scatter(shape[0], shape[1], c=(1, 0, 1))
+        self.axes.scatter(shape[0], shape[1], c=(1, 0, 1, 1))
         self.canvas.draw()
-
-if __name__ == "__main__":
-    app = GANMonitor()
-    app.mainloop()
-
-
 
 if __name__ == "__main__":
     app = GANMonitor()
