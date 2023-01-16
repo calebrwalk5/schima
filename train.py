@@ -4,7 +4,7 @@ import numpy as np
 # Generate a dataset of images of trapezoids to learn from
 def generate_data():
     trapezoids = []
-    for i in range(10000):
+    for i in range(100):
         x, y = np.random.rand(2)
         x = x * 4 - 2  # scale x values between -2 and 2
         if x < -1:  # left side of the trapezoid
@@ -14,10 +14,19 @@ def generate_data():
         else:  # top of the trapezoid
             y = y * 2 - 1  # scale y values between -1 and 1
             y = y * (1 - abs(x))  # adjust y based on x position
+        
+        if x < -1:
+            y = y * abs(x+1)
+        elif x >= -1 and x<=1:
+            y = y * (1-abs(x))
+        else:
+            y = y * (x-1)
+        
         trapezoids.append([x, y])
     data = np.array(trapezoids)
     labels = np.ones(len(trapezoids))
     return data, labels
+
 
 # Create the GAN
 def create_gan():
@@ -42,7 +51,7 @@ def create_gan():
 # Train the GAN
 def train_gan(gan, generator, discriminator):
     data, labels = generate_data()
-    for i in range(10000):
+    for i in range(100):
         # Generate fake data
         noise = np.random.randn(len(data), 2)
         fake_data = generator.predict(noise)
@@ -53,6 +62,8 @@ def train_gan(gan, generator, discriminator):
         noise = np.random.randn(len(data), 2)
         g_loss = gan.train_on_batch(noise, np.ones(len(data)))
         print(f'Step {i}, D loss: {d_loss[0]}, D acc: {d_loss[1]}, G loss: {g_loss}')
+    return i, d_loss[0], d_loss[1], g_loss
+
 
 # Use the generator to generate new shapes
 def generate_shapes(generator, prompt):

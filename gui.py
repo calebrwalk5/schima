@@ -54,24 +54,21 @@ class GANMonitor(tk.Tk):
         self.canvas.get_tk_widget().pack()
 
     def display_shapes(self):
-        shape = generate_shapes(self.generator, "trapezoid")
-        self.plot_shape(shape)
-        if self.running:
-            self.after(50, self.display_shapes)
+            train_gan(self.gan, self.generator, self.discriminator)
+            shape = generate_shapes(self.generator, "trapezoid")
+            shape = shape.reshape(1,-1)
+            self.plot_shape(shape)
+            if self.running:
+                self.after(50, self.display_shapes)
+
 
     def plot_shape(self, shape):
-        x_min, x_max = np.min(shape[0]), np.max(shape[0])
-        y_min, y_max = np.min(shape[1]), np.max(shape[1])
-        size = max(x_max - x_min, y_max - y_min)
-        x_center, y_center = (x_max + x_min) / 2, (y_max + y_min) / 2
-        x_min, x_max = x_center - size / 2, x_center + size / 2
-        y_min, y_max = y_center - size / 2, y_center + size / 2
-        self.axes.clear()
-        self.axes.scatter(shape[0], shape[1])
-        self.axes.set_xlim(-2.5, 2.5)
-        self.axes.set_ylim(-2.5, 2.5)
-        self.axes.set_aspect('equal')
-        self.canvas.draw()
+            self.axes.clear()
+            self.axes.scatter(shape[:,0], shape[:,1])
+            self.axes.set_xlim(-2.5, 2.5)
+            self.axes.set_ylim(-2.5, 2.5)
+            self.axes.set_aspect('equal')
+            self.canvas.draw()
 
     def start(self):
         self.running = True
