@@ -57,7 +57,6 @@ def train_gan(gan, generator, discriminator):
 
 # Use the generator to generate new shapes
 def generate_shapes(generator, prompt, noise):
-    noise = noise
     if prompt == 'hexagon':
         noise[0, 0] = abs(noise[0, 0])
         noise[0, 1] = abs(noise[0, 1])
@@ -66,9 +65,10 @@ def generate_shapes(generator, prompt, noise):
     shape = generator.predict(noise)[0]
     return shape
 
+
 if __name__ == '__main__':
     gan, generator, discriminator = create_gan()
     train_gan(gan, generator, discriminator)
     noise = np.random.randn(1, 2)
-    shape = generate_shapes(generator, noise)
+    shape = generate_shapes(generator, 'hexagon', noise)
     print(shape)
