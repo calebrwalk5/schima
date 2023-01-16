@@ -4,17 +4,15 @@ import numpy as np
 # Generate a dataset of images of circles and squares
 def generate_data():
     circles = []
-    for i in range(10000):
-        x, y = np.random.rand(2)
+    for i in range(10000): # Generations
+        x, y = np.random.rand(2) # Random numbers between 0 and 1
         x = x*2-1
         y = y*2-1
-        if x**2 + y**2 <= 1:
+        if x**2 + y**2 <= 1: # Check if point is inside circle
             circles.append([x, y])
     data = np.array(circles)
     labels = np.ones(len(circles))
     return data, labels
-
-
 
 # Create the GAN
 def create_gan():
