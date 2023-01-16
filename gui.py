@@ -71,10 +71,10 @@ class GANMonitor(tk.Tk):
             self.canvas.draw()
 
     def start(self):
-            self.running = True
-            self.train_thread.start()
-            self.after(50, self.update_train_queue, self.train_queue)
-
+        self.running = True
+        self.train_thread.start()
+        self.display_shapes()
+        self.after(50, self.update_train_queue, self.train_queue)
 
     def stop(self):
         self.running = False

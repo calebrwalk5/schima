@@ -4,7 +4,7 @@ import numpy as np
 # Generate a dataset of images of trapezoids to learn from
 def generate_data():
     trapezoids = []
-    for i in range(100):
+    for i in range(10):
         x, y = np.random.rand(2)
         x = x * 4 - 2  # scale x values between -2 and 2
         if x < -1:  # left side of the trapezoid
@@ -51,7 +51,7 @@ def create_gan():
 # Train the GAN
 def train_gan(gan, generator, discriminator):
     data, labels = generate_data()
-    for i in range(100):
+    for i in range(10):
         # Generate fake data
         noise = np.random.randn(len(data), 2)
         fake_data = generator.predict(noise)
