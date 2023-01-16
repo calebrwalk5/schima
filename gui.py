@@ -3,7 +3,7 @@ from threading import Thread
 import matplotlib
 matplotlib.use("TkAgg")
 from tkinter import ttk
-from train import train_gan, generate_shapes, create_gan
+from train import train_gan, generate_shapes, create_gan, generate_data
 from matplotlib.backends.backend_tkagg import FigureCanvasTkAgg
 from matplotlib.figure import Figure
 import matplotlib.pyplot as plt
@@ -62,6 +62,8 @@ class GANMonitor(tk.Tk):
     def display_shapes(self):
         shape = generate_shapes(self.generator, "trapezoid")
         self.plot_shape(shape)
+        self.display_data()
+        self.plot_data()
         if self.running:
             self.after(50, self.display_shapes)
 
@@ -73,18 +75,17 @@ class GANMonitor(tk.Tk):
     
     def plot_data(self):
         data, labels = generate_data()
-        self.axes.clear()
-        self.axes.scatter(data[:, 0], data[:, 1], c=(1, 0, 1))
-        self.canvas.draw()
-        self.axes.set_xlim(-2, 2)
-        self.axes.set_ylim(-1, 1)
+        self.data_axes.clear()
+        self.data_axes.scatter(data[:, 0], data[:, 1], c=(1, 0, 1))
+        self.data_canvas.draw()
+        self.data_axes.set_xlim(-2, 2)
+        self.data_axes.set_ylim(-1, 1)
 
     def add_data_plot(self):
         self.data_figure = Figure(figsize=(5, 5))
         self.data_axes = self.data_figure.add_subplot(111)
         self.data_canvas = FigureCanvasTkAgg(self.data_figure, self)
         self.data_canvas.get_tk_widget().pack()
-
 
     def plot_shape(self, shape):
         self.shape_axes.clear()
@@ -95,7 +96,9 @@ class GANMonitor(tk.Tk):
         self.running = True
         self.train_thread.start()
         self.display_shapes()
+        self.add_data_plot()
         self.plot_data()
+        self.display_data()
         self.after(50, self.update_train_queue, self.train_queue)
 
     def stop(self):
