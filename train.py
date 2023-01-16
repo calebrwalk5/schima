@@ -42,7 +42,7 @@ def create_gan():
 # Train the GAN
 def train_gan(gan, generator, discriminator):
     data, labels = generate_data()
-    for i in range(1000):
+    for i in range(10000):
         # Generate fake data
         noise = np.random.randn(len(data), 2)
         fake_data = generator.predict(noise)

@@ -59,6 +59,12 @@ class GANMonitor(tk.Tk):
         if self.running:
             self.after(50, self.display_shapes)
 
+    def display_data(self):
+        data, labels = generate_data()
+        # Code for displaying data
+        if self.running:
+            self.after(50, self.display_data)
+
     def plot_shape(self, shape):
         self.axes.clear()
         self.axes.scatter(shape[0], shape[1], c=(1, 0, 1))
@@ -68,7 +74,9 @@ class GANMonitor(tk.Tk):
         self.running = True
         self.train_thread.start()
         self.display_shapes()
+        self.display_data()
         self.after(50, self.update_train_queue, self.train_queue)
+
 
     def stop(self):
         self.running = False
