@@ -13,6 +13,7 @@ import os
 import queue
 import time
 import threading
+from collections import Iterable
 
 class GANMonitor(tk.Tk):
     def __init__(self):
