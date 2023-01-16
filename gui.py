@@ -16,7 +16,7 @@ class GANMonitor(tk.Tk):
     def __init__(self):
         tk.Tk.__init__(self)
         self.title("Schima | GAN Monitor")
-        self.geometry("500x500")
+        self.geometry("1000x1000")
 
         self.gan, self.generator, self.discriminator = create_gan()
         self.running = False
@@ -48,10 +48,16 @@ class GANMonitor(tk.Tk):
         self.shape_label.pack()
 
         # View the shape
-        self.figure = Figure(figsize=(5, 5))
-        self.axes = self.figure.add_subplot(111)
-        self.canvas = FigureCanvasTkAgg(self.figure, self)
-        self.canvas.get_tk_widget().pack()
+        self.shape_figure = Figure(figsize=(5, 5))
+        self.shape_axes = self.shape_figure.add_subplot(111)
+        self.shape_canvas = FigureCanvasTkAgg(self.shape_figure, self)
+        self.shape_canvas.get_tk_widget().pack()
+
+        # View the data
+        self.data_figure = Figure(figsize=(5, 5))
+        self.data_axes = self.data_figure.add_subplot(111)
+        self.data_canvas = FigureCanvasTkAgg(self.data_figure, self)
+        self.data_canvas.get_tk_widget().pack()
 
     def display_shapes(self):
         shape = generate_shapes(self.generator, "trapezoid")
@@ -64,19 +70,33 @@ class GANMonitor(tk.Tk):
         # Code for displaying data
         if self.running:
             self.after(50, self.display_data)
+    
+    def plot_data(self):
+        data, labels = generate_data()
+        self.axes.clear()
+        self.axes.scatter(data[:, 0], data[:, 1], c=(1, 0, 1))
+        self.canvas.draw()
+        self.axes.set_xlim(-2, 2)
+        self.axes.set_ylim(-1, 1)
+
+    def add_data_plot(self):
+        self.data_figure = Figure(figsize=(5, 5))
+        self.data_axes = self.data_figure.add_subplot(111)
+        self.data_canvas = FigureCanvasTkAgg(self.data_figure, self)
+        self.data_canvas.get_tk_widget().pack()
+
 
     def plot_shape(self, shape):
-        self.axes.clear()
-        self.axes.scatter(shape[0], shape[1], c=(1, 0, 1))
-        self.canvas.draw()
+        self.shape_axes.clear()
+        self.shape_axes.scatter(shape[0], shape[1], c=(1, 0, 1))
+        self.shape_canvas.draw()
 
     def start(self):
         self.running = True
         self.train_thread.start()
         self.display_shapes()
-        self.display_data()
+        self.plot_data()
         self.after(50, self.update_train_queue, self.train_queue)
-
 
     def stop(self):
         self.running = False
