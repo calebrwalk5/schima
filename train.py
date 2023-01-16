@@ -8,7 +8,7 @@ def generate_data():
     for i in range(1000):
         # Generate a random hexagon
         x, y = np.random.randn(2)
-        if abs(x) + abs(y) <= 1:
+        if (x**2 + y**2 <= 1) and (x*y >= 0):
             hexagons.append([x, y])
         # Generate a random square
         x, y = np.random.randn(2)
