@@ -11,6 +11,8 @@ import numpy as np
 import cv2
 import os
 import queue
+import time
+import threading
 
 class GANMonitor(tk.Tk):
     def __init__(self):
@@ -54,17 +56,18 @@ class GANMonitor(tk.Tk):
         self.canvas.get_tk_widget().pack()
 
     def display_shapes(self):
-            train_gan(self.gan, self.generator, self.discriminator)
+        for i in range(10):
             shape = generate_shapes(self.generator, "trapezoid")
             shape = shape.reshape(1,-1)
             self.plot_shape(shape)
-            if self.running:
-                self.after(50, self.display_shapes)
+            if not self.running:
+                break
+            self.after(1000, self.display_shapes)
 
 
     def plot_shape(self, shape):
             self.axes.clear()
-            self.axes.scatter(shape[:,0], shape[:,1])
+            self.axes.scatter(shape[0,0], shape[0,1])
             self.axes.set_xlim(-2.5, 2.5)
             self.axes.set_ylim(-2.5, 2.5)
             self.axes.set_aspect('equal')
@@ -73,12 +76,14 @@ class GANMonitor(tk.Tk):
     def start(self):
         self.running = True
         self.train_thread.start()
-        self.display_shapes()
+        self.display_thread = threading.Thread(target=self.display_shapes)
+        self.display_thread.start()
         self.after(50, self.update_train_queue, self.train_queue)
 
     def stop(self):
         self.running = False
         self.train_thread.join()
+        self.display_thread.join()
 
     def train(self, train_queue):
         while self.running:
