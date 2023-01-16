@@ -61,7 +61,7 @@ class GANMonitor(tk.Tk):
 
     def plot_shape(self, shape):
         self.axes.clear()
-        self.axes.scatter(shape[0], shape[1], c=(1, 0, 1))
+        self.axes.scatter(shape[0], shape[1])
         self.canvas.draw()
 
     def start(self):
