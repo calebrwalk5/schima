@@ -15,7 +15,7 @@ import queue
 class GANMonitor(tk.Tk):
     def __init__(self):
         tk.Tk.__init__(self)
-        self.title("GAN Monitor")
+        self.title("Schima | GAN Monitor")
         self.geometry("500x500")
 
         self.gan, self.generator, self.discriminator = create_gan()
@@ -54,14 +54,14 @@ class GANMonitor(tk.Tk):
         self.canvas.get_tk_widget().pack()
 
     def display_shapes(self):
-        shape = generate_shapes(self.generator, "square")
+        shape = generate_shapes(self.generator, "circle")
         self.plot_shape(shape)
         if self.running:
             self.after(50, self.display_shapes)
 
     def plot_shape(self, shape):
         self.axes.clear()
-        self.axes.scatter(shape[0], shape[1])
+        self.axes.scatter(shape[0], shape[1], c=(1, 0, 1))
         self.canvas.draw()
 
     def start(self):
@@ -92,13 +92,13 @@ class GANMonitor(tk.Tk):
                 self.after(50, self.update_train_queue, train_queue)
 
     def generate_shape(self):
-        shape = generate_shapes(self.generator, "square")
+        shape = generate_shapes(self.generator, "circle")
         self.plot_shape(shape)
         x, y = shape[0], shape[1]
         color = np.full(x.shape, 'r')
         self.shape_label.config(text="Shape: {}".format(shape))
         self.axes.clear()
-        self.axes.scatter(x, y, c='magenta')
+        self.axes.scatter(shape[0], shape[1], c=(1, 0, 1))
         self.canvas.draw()
 
 if __name__ == "__main__":

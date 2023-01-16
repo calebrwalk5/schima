@@ -57,13 +57,11 @@ def generate_shapes(generator, prompt):
     if prompt == 'circle':
         noise[0, 0] = abs(noise[0, 0])
         noise[0, 1] = abs(noise[0, 1])
-    elif prompt == 'square':
-        noise[0, 0] = noise[0, 0]
     shape = generator.predict(noise)[0]
     return shape
 
 if __name__ == '__main__':
     gan, generator, discriminator = create_gan()
     train_gan(gan, generator, discriminator)
-    shape = generate_shapes(generator, 'square')
+    shape = generate_shapes(generator, 'circle')
     print(shape)
