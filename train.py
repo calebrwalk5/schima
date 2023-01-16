@@ -3,14 +3,19 @@ import numpy as np
 
 # Generate a dataset of images of circles and squares
 def generate_data():
+    hexagons = []
     squares = []
     for i in range(1000):
+        # Generate a random hexagon
+        x, y = np.random.randn(2)
+        if abs(x) + abs(y) <= 1:
+            hexagons.append([x, y])
         # Generate a random square
         x, y = np.random.randn(2)
         if abs(x) <= 1 and abs(y) <= 1:
             squares.append([x, y])
-    data = np.concatenate((circles, squares), axis=0)
-    labels = np.concatenate((np.zeros(len(circles)), np.ones(len(squares))))
+    data = np.concatenate((hexagons, squares), axis=0)
+    labels = np.concatenate((np.zeros(len(hexagons)), np.ones(len(squares))))
     return data, labels
 
 # Create the GAN
@@ -51,7 +56,7 @@ def train_gan(gan, generator, discriminator):
 # Use the generator to generate new shapes
 def generate_shapes(generator, prompt):
     noise = np.random.randn(1, 2)
-    if prompt == 'circle':
+    if prompt == 'hexagon':
         noise[0, 0] = abs(noise[0, 0])
         noise[0, 1] = abs(noise[0, 1])
     elif prompt == 'square':
@@ -62,5 +67,5 @@ def generate_shapes(generator, prompt):
 if __name__ == '__main__':
     gan, generator, discriminator = create_gan()
     train_gan(gan, generator, discriminator)
-    shape = generate_shapes(generator, 'square')
+    shape = generate_shapes(generator, 'hexagon')
     print(shape)
