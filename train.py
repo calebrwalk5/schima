@@ -1,25 +1,17 @@
 import tensorflow as tf
 import numpy as np
-import matplotlib.pyplot as plt
 
-# Thank you ChatGPT :)
+# Generate a dataset of images of circles and squares
 def generate_data():
-    hexagons = []
     squares = []
     for i in range(1000):
-        # Generate a random hexagon using your equation
-        angle = np.random.uniform(0, 2*np.pi)
-        x = (np.cos(angle) + np.cos(angle + np.pi/3) + np.cos(angle + 2*np.pi/3))/3
-        y = (np.sin(angle) + np.sin(angle + np.pi/3) + np.sin(angle + 2*np.pi/3))/3
-        hexagons.append([x, y])
         # Generate a random square
         x, y = np.random.randn(2)
         if abs(x) <= 1 and abs(y) <= 1:
             squares.append([x, y])
-    data = np.concatenate((hexagons, squares), axis=0)
-    labels = np.concatenate((np.zeros(len(hexagons)), np.ones(len(squares))))
+    data = np.concatenate((circles, squares), axis=0)
+    labels = np.concatenate((np.zeros(len(circles)), np.ones(len(squares))))
     return data, labels
-
 
 # Create the GAN
 def create_gan():
@@ -57,8 +49,9 @@ def train_gan(gan, generator, discriminator):
         print(f'Step {i}, D loss: {d_loss[0]}, D acc: {d_loss[1]}, G loss: {g_loss}')
 
 # Use the generator to generate new shapes
-def generate_shapes(generator, prompt, noise):
-    if prompt == 'hexagon':
+def generate_shapes(generator, prompt):
+    noise = np.random.randn(1, 2)
+    if prompt == 'circle':
         noise[0, 0] = abs(noise[0, 0])
         noise[0, 1] = abs(noise[0, 1])
     elif prompt == 'square':
@@ -66,10 +59,8 @@ def generate_shapes(generator, prompt, noise):
     shape = generator.predict(noise)[0]
     return shape
 
-
 if __name__ == '__main__':
     gan, generator, discriminator = create_gan()
     train_gan(gan, generator, discriminator)
-    noise = np.random.randn(1, 2)
-    shape = generate_shapes(generator, prompt, noise)
+    shape = generate_shapes(generator, 'square')
     print(shape)

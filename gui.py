@@ -3,7 +3,7 @@ from threading import Thread
 import matplotlib
 matplotlib.use("TkAgg")
 from tkinter import ttk
-from train import train_gan, generate_shapes, create_gan, noise
+from train import train_gan, generate_shapes, create_gan
 from matplotlib.backends.backend_tkagg import FigureCanvasTkAgg
 from matplotlib.figure import Figure
 import matplotlib.pyplot as plt
@@ -54,7 +54,7 @@ class GANMonitor(tk.Tk):
         self.canvas.get_tk_widget().pack()
 
     def display_shapes(self):
-        shape = generate_shapes(self.generator, "hexagon")
+        shape = generate_shapes(self.generator, "square")
         self.plot_shape(shape)
         if self.running:
             self.after(50, self.display_shapes)
@@ -92,7 +92,7 @@ class GANMonitor(tk.Tk):
                 self.after(50, self.update_train_queue, train_queue)
 
     def generate_shape(self):
-        shape = generate_shapes(self.generator, "hexagon")
+        shape = generate_shapes(self.generator, "square")
         self.plot_shape(shape)
         x, y = shape[0], shape[1]
         color = np.full(x.shape, 'r')
