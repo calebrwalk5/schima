@@ -56,7 +56,7 @@ def train_gan(gan, generator, discriminator):
         print(f'Step {i}, D loss: {d_loss[0]}, D acc: {d_loss[1]}, G loss: {g_loss}')
 
 # Use the generator to generate new shapes
-def generate_shapes(generator, 'hexagon', noise):
+def generate_shapes(generator, prompt, noise):
     noise = noise
     if prompt == 'hexagon':
         noise[0, 0] = abs(noise[0, 0])
