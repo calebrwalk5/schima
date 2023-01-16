@@ -71,10 +71,10 @@ class GANMonitor(tk.Tk):
             self.canvas.draw()
 
     def start(self):
-        self.running = True
-        self.train_thread.start()
-        self.display_shapes()
-        self.after(50, self.update_train_queue, self.train_queue)
+            self.running = True
+            self.train_thread.start()
+            self.after(50, self.update_train_queue, self.train_queue)
+
 
     def stop(self):
         self.running = False
@@ -98,15 +98,21 @@ class GANMonitor(tk.Tk):
             if self.running:
                 self.after(50, self.update_train_queue, train_queue)
 
+#    def generate_shape(self):
+#        shape = generate_shapes(self.generator, "trapezoid")
+#        self.plot_shape(shape)
+#        x, y = shape[0], shape[1]
+#        color = np.full(x.shape, 'r')
+#        self.shape_label.config(text="Shape: {}".format(shape))
+#        self.axes.clear()
+#        self.axes.scatter(shape[0], shape[1], c=(1, 0, 1))
+#        self.canvas.draw()
+
     def generate_shape(self):
-        shape = generate_shapes(self.generator, "trapezoid")
-        self.plot_shape(shape)
-        x, y = shape[0], shape[1]
-        color = np.full(x.shape, 'r')
-        self.shape_label.config(text="Shape: {}".format(shape))
-        self.axes.clear()
-        self.axes.scatter(shape[0], shape[1], c=(1, 0, 1))
-        self.canvas.draw()
+            shape = generate_shapes(self.generator, "trapezoid")
+            shape = shape.reshape(1,-1)
+            self.plot_shape(shape)
+
 
 if __name__ == "__main__":
     app = GANMonitor()
