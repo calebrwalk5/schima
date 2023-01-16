@@ -60,7 +60,7 @@ class GANMonitor(tk.Tk):
         shape = shape.reshape(1,-1)
         self.plot_shape(shape)
         if self.running:
-            self.after(1000, self.display_shapes)
+            self.after(10, self.display_shapes)
 
 
     def plot_shape(self, shape):
@@ -111,10 +111,17 @@ class GANMonitor(tk.Tk):
 #        self.axes.scatter(shape[0], shape[1], c=(1, 0, 1))
 #        self.canvas.draw()
 
-    def generate_shape(self):
-            shape = generate_shapes(self.generator, "trapezoid")
-            shape = shape.reshape(1,-1)
-            self.plot_shape(shape)
+    def generate_shape(generator, prompt, n_shapes=10):
+        shapes = []
+        for i in range(n_shapes):
+            noise = np.random.randn(1, 2)
+            if prompt == 'trapezoid':
+                noise[0, 0] = abs(noise[0, 0])
+                noise[0, 1] = abs(noise[0, 1])
+            shape = generator.predict(noise)[0]
+            shapes.append(shape)
+        return shapes
+
 
 
 if __name__ == "__main__":
