@@ -1,2 +1,2 @@
 # Schima
-Schima is a generative adversarial network that generates shapes
+Schima is a GAN that is trying to learn the Mandelbrot set 
